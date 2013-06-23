@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">India Votes</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Please Enter your Details</string>
+    <string name="title_activity_cricket">Cricket</string>
+    <string name="title_activity_submit">Result</string>
+
+</resources>
