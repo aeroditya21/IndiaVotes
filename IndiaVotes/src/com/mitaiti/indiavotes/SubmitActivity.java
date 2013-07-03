@@ -1,16 +1,26 @@
 package com.mitaiti.indiavotes;
 
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 
 public class SubmitActivity extends Activity {
 
+	TextView tv;
+	LocationListener loclistener;
+	LocationManager locmgr;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -18,11 +28,45 @@ public class SubmitActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		boolean answer = getIntent().getBooleanExtra("Answer", false);
-		TextView tv = (TextView) findViewById(R.id.submit_text);
+		tv = (TextView) findViewById(R.id.submit_text);
 		if(answer)
 			tv.setText("60% of respondents replied YES!");
 		else
 			tv.setText("40% respondents replied NO!");
+		
+		locmgr = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		loclistener = new LocationListener() {
+
+			@Override
+			public void onLocationChanged(Location location) {
+				double lat = location.getLatitude();
+				double lon = location.getLongitude();
+				tv.setText("Location Listener...\n" + "Latitude = " + lat + "\nLongitude = " + lon);
+				Toast.makeText(SubmitActivity.this, "Location Changed!", Toast.LENGTH_SHORT)
+				.show();
+			}
+
+			@Override
+			public void onProviderDisabled(String provider) {
+				Toast.makeText(SubmitActivity.this, "Location Disabled!", Toast.LENGTH_SHORT)
+				.show();
+			}
+
+			@Override
+			public void onProviderEnabled(String provider) {
+				Toast.makeText(SubmitActivity.this, "Location Enabled!", Toast.LENGTH_SHORT)
+				.show();				
+			}
+
+			@Override
+			public void onStatusChanged(String provider, int status,
+					Bundle extras) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		
 	}
 
 	/**
@@ -57,6 +101,14 @@ public class SubmitActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void startListeningtoLocation(View view) {
+		locmgr.requestLocationUpdates(locmgr.GPS_PROVIDER,5000,2,loclistener);
+	}
+	
+	public void stopListeningtoLocation(View view) {
+		locmgr.removeUpdates(loclistener);
 	}
 
 }

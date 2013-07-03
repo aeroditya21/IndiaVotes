@@ -12,4 +12,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/loclisten_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Listen Location" 
+        android:onClick="startListeningtoLocation"/>
+
+    <Button
+        android:id="@+id/locstop_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loclisten_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:text="Stop Listening"
+        android:onClick="stopListeningtoLocation" />
+
 </RelativeLayout>
