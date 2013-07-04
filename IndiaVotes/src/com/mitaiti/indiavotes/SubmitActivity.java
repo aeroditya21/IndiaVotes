@@ -3,6 +3,8 @@ package com.mitaiti.indiavotes;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 public class SubmitActivity extends Activity {
@@ -21,6 +24,22 @@ public class SubmitActivity extends Activity {
 	LocationListener loclistener;
 	LocationManager locmgr;
 	
+	private class IPFetcher extends AsyncTask<String, Integer, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(params[0]));
+			startActivity(browserIntent);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			Toast.makeText(getApplicationContext(), "Finished Task!", Toast.LENGTH_SHORT).show();
+			super.onPostExecute(result);
+		}
+		
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,6 +53,11 @@ public class SubmitActivity extends Activity {
 		else
 			tv.setText("40% respondents replied NO!");
 		
+		// Async Task Code
+		new IPFetcher().execute("http://www.google.com");
+		
+		
+		// Location Services
 		locmgr = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		loclistener = new LocationListener() {
 
