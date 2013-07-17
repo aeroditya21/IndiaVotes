@@ -1,5 +1,13 @@
 package com.mitaiti.indiavotes;
 
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,10 +25,42 @@ public class MainActivity extends Activity {
 	int age;
 	Gender gender;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		 HttpURLConnection conn = null;
+	     StringBuilder jsonResults = new StringBuilder();
+	     String pythonURL = "http://localhost:8000/polls/get_polls/";
+	     try{
+	    	 URL url = new URL(pythonURL);
+	            conn = (HttpURLConnection) url.openConnection();
+	            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+	            
+	            int read;
+	            char[] buff = new char[1024];
+	            while ((read = in.read(buff)) != -1) {
+	                jsonResults.append(buff, 0, read);
+	            }
+	     }
+	     catch(Exception e){
+	            Log.e("ERROR", "Python problem : check logcat!", e);
+
+	     }
+	     
+	     try {
+	            // Create a JSON object hierarchy from the results
+	        	Log.d("JSON","Parsing resultant JSON :)");
+	            JSONObject jsonObj = new JSONObject(jsonResults.toString());
+	            JSONArray predsJsonArray = jsonObj.getJSONArray("fields");
+	            Log.d("JSON", predsJsonArray.toString());
+	     }
+	     catch(Exception e){
+	            Log.e("ERROR", "Python problem : check logcat!", e);
+
+	     }
 	}
 
 	@Override
